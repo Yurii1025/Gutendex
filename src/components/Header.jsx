@@ -1,6 +1,22 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+const categories = [
+  "fiction",
+  "mystery",
+  "thriller",
+  "romance",
+  "fantasy",
+  "morality",
+  "society",
+  "power",
+  "justice",
+  "adventure",
+  "tragedy",
+  "war",
+  "philosophy"
+];
+
 
 function Header ({ onSearch }) {
     const [input, setInput] = useState("");
@@ -14,7 +30,18 @@ function Header ({ onSearch }) {
         <nav>
             <Link to="/">Home</Link> |{" "}
             <Link to="/favorites">Favorites</Link> |{" "}
-            <Link to="/category/fiction">Fiction</Link>
+            <div>
+                {categories.map((cat) => (
+                    <Link
+                        key={cat}
+                        to={`/category/${cat}`}
+                        style={{marginRight: "10px"}}
+                    >
+                        {cat}
+                    </Link>
+                ))}
+            </div>
+            {/* <Link to="/category/fiction">Fiction</Link> */}
 
             <form onSubmit={handleSubmit}>
                 <input

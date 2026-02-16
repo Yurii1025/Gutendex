@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 
 function BookDetails() {
     const { id } = useParams();
-    const { addToFavorites } = useOutletContext();
+    const { addToFavorites, favorites } = useOutletContext();
 
     
     const [book, setBook] = useState(null);
@@ -31,6 +31,8 @@ function BookDetails() {
     if (error) return <p>Error: {error}</p>
     if (!book) return null;
 
+    const isFavorites = favorites.some(item => item.id === book.id);
+
     return (
         <div>
             <h1>{book.title}</h1>
@@ -54,10 +56,27 @@ function BookDetails() {
                     width="200"
                 />
             )}
+            
+            {book.formats["text/html"] && (
+                <p>
+                    <a
+                        href={book.formats["text/html"]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Read Online
+                    </a>
+                </p>
+            )}
 
-            <button onClick={() => addToFavorites(book)}>
-                Add to Favorites
-            </button>
+            {isFavorites ? (
+                <p>Aleready in Favorites</p>
+            ) : (
+                <button onClick={() => addToFavorites(book)}>
+                    Add to Favorites
+                </button>
+            )}
+            
         </div>
     )
 }
