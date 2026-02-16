@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Header from "./components/Header";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("favorites");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  function addToFavorites(book) {
+    const exists = favorites.find((item) => item.id === book.id);
+    if (exists) return;
+
+    setFavorites([...favorites, book]);
+  }
+
+  function removeFromFavorites(id) {
+    setFavorites(favorites.filter(book => book.id !== id));
+  }
+
+  function handleSearch(term) {
+    setSearchTerm(term);
+  }
+  
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header onSearch={handleSearch} />
+      <Outlet context={{ searchTerm, favorites, addToFavorites, removeFromFavorites }} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
