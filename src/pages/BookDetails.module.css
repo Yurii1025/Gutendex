@@ -1,0 +1,44 @@
+
+
+.wrapper {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.image {
+  width: 250px;
+  border-radius: 6px;
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.meta {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.button {
+  margin-top: 15px;
+  padding: 8px 14px;
+  background: #222;
+  color: white;
+  border-radius: 6px;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #0066cc;
+}

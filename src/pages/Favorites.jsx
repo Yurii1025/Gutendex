@@ -1,28 +1,26 @@
+import BookList from "../components/BookList";
+import styles from "./Favorites.module.css";
 import { useOutletContext } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 function Favorites() {
-    const { favorites, removeFromFavorites } = useOutletContext();
+  const { favorites, removeFromFavorites } = useOutletContext();
 
-    return (
-        <div>
-            <h1>Favorites page</h1>
+  return (
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>Your Favorites</h1>
 
-            {favorites.length == 0 && <p>No faorites yet</p>}
-
-            {favorites.map((book) => (
-                <div key={book.id}>
-                    <Link to={`/book/${book.id}`}>
-                        {book.title}
-                        <button onClick={() => removeFromFavorites(book.id)}>
-                            Remove
-                        </button>
-                    </Link>
-                </div>
-            ))}
-            
-        </div>
-    );
+      {favorites.length === 0 ? (
+        <p className={styles.empty}>
+          You haven't added any books yet.
+        </p>
+      ) : (
+        <BookList
+          books={favorites}
+          onRemove={removeFromFavorites}
+        />
+      )}
+    </div>
+  );
 }
 
 export default Favorites;
