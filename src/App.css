@@ -1,8 +1,8 @@
-#root {
+/* #root {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
+} */
 /* RESET */
 *,
 *::before,
@@ -35,3 +35,21 @@ button, input {
     background-color: inherit;
 }
 /* RESET */
+
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background-color: #f5f5f5;
+}
+
+.app {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+.main {
+	flex: 1;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+}

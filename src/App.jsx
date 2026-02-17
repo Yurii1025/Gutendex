@@ -33,10 +33,12 @@ function App() {
   
 
   return (
-    <>
+    <div className='app'>
       <Header onSearch={handleSearch} />
-      <Outlet context={{ searchTerm, favorites, addToFavorites, removeFromFavorites }} />
-    </>
+      <main className='main'>
+        <Outlet context={{ searchTerm, favorites, addToFavorites, removeFromFavorites }} />
+      </main>
+    </div>
   );
 }
 
