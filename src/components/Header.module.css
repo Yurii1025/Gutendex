@@ -57,7 +57,7 @@
 
 .dropdownMenu {
     position: absolute;
-    top: 35px;
+    top: 40px;
     left: 0;
     background: white;
     color: #000;
@@ -68,6 +68,16 @@
     flex-direction: column;
     gap: 5px;
     min-width: 150px;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 .dropdownItem {
     color: #000;
