@@ -21,6 +21,7 @@ const categories = [
 function Header({ onSearch }) {
   const [input, setInput] = useState("");
   const [showCategory, setShowCategory] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
 
@@ -47,11 +48,25 @@ function Header({ onSearch }) {
     setShowCategory(false);
   }, [location]);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logo}>Gutendex books</div>
-
+        <div className={styles.logo}>Gutendex</div>
+        <button className={styles.burger} onClick={() => setMobileOpen(true)}>
+          ☰
+        </button>
         <nav className={styles.nav}>
           <Link to="/" className={styles.link}>
             Home
@@ -97,6 +112,41 @@ function Header({ onSearch }) {
             Search
           </button>
         </form>
+      </div>
+      <div
+        className={`${styles.overlay} ${mobileOpen ? styles.show : ""}`}
+        onClick={() => setMobileOpen(false)}
+      ></div>
+
+      <div className={`${styles.sidebar} ${mobileOpen ? styles.open : ""}`}>
+        <button className={styles.close} onClick={() => setMobileOpen(false)}>
+          ✕
+        </button>
+
+        <div className={styles.section}>
+          <Link to="/" onClick={() => setMobileOpen(false)}>
+            Home
+          </Link>
+          <Link to="/favorites" onClick={() => setMobileOpen(false)}>
+            Favorites
+          </Link>
+        </div>
+
+        <div className={styles.divider}></div>
+
+        <div className={styles.section}>
+          <p className={styles.sectionTitle}>Categories</p>
+
+          {categories.map((cat) => (
+            <Link
+              key={cat}
+              to={`/category/${cat}`}
+              onClick={() => setMobileOpen(false)}
+            >
+              {cat}
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   );
