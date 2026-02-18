@@ -65,7 +65,7 @@ function Header({ onSearch }) {
               onClick={() => setShowCategory((prev) => !prev)}
               className={styles.link}
             >
-              Categories ▾
+              Categories ↓
             </button>
 
             <div
