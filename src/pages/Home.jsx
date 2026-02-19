@@ -1,75 +1,71 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import BookList from "../components/BookList";
-// import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
+import styles from "./Home.module.css";
 
+// Home page handles book search and pagination
+// Fetches data from Gutendex API based on searchTerm
 function Home() {
-    const { searchTerm } = useOutletContext();
-    const [books, setBooks] = useState([]);
+  // Retrieve search term from global context
+  const { searchTerm } = useOutletContext();
+  // Local state for API data and UI control
+  const [books, setBooks] = useState([]);
+  const [nextUrl, setNextUrl] = useState(null);
+  const [prevUrl, setPrevUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const [nextUrl, setNextUrl] = useState(null);
-    const [prevUrl, setPrevUrl] = useState(null);
+  // Reusable function to fetch books from API
+  function fetchBooks(url) {
+    setLoading(true);
+    setError(null);
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setBooks(data.results);
+        setNextUrl(data.next);
+        setPrevUrl(data.previous);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Something went wrond");
+        setLoading(false);
+      });
+  }
 
-    function fetchBooks(url) {
-        setLoading(true);
-        setError(null);
+  // Trigger fetch when searchTerm changes
+  useEffect(() => {
+    if (!searchTerm) return;
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                setBooks(data.results);
-                setNextUrl(data.next);
-                setPrevUrl(data.previous);
-                setLoading(false);
-            })
-            .catch(() => {
-                setError("Something went wrond");
-                setLoading(false);
-            });
-    }
+    setLoading(true);
+    setError(null);
 
-    useEffect(() => {
-        if (!searchTerm) return;
+    fetchBooks(`https://gutendex.com/books?search=${searchTerm}`);
+  }, [searchTerm]);
 
-        setLoading(true);
-        setError(null);
+  // Conditional UI rendering
+  if (loading) return <Loader />;
+  if (error) return <p>{error}</p>;
 
-        fetchBooks(`https://gutendex.com/books?search=${searchTerm}`);
-    }, [searchTerm]);
+  return (
+    <div>
+      {/* <h1>Home page</h1> */}
+      <div className={styles.hero}>
+        <h1 className={styles.title}>Discover timeless books</h1>
+        <p className={styles.subtitle}>
+          Search and explore classic literature from Project Gutenberg.
+        </p>
+      </div>
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+      <BookList books={books} />
 
-    return (
-        <div>
-            <h1>Home page</h1>
-
-            {/* {books.map((book) => (
-                <div key={book.id}>
-                    <Link to={`/book/${book.id}`}>
-                        {book.title}
-                    </Link>
-                </div>
-            ))} */}
-            <BookList books={books} />
-
-            {prevUrl && (
-                <button onClick={()=> fetchBooks(prevUrl)}>
-                    Previous
-                </button>
-            )}
-
-            {nextUrl && (
-                <button onClick={() => fetchBooks(nextUrl)}>
-                    Next
-                </button>
-            )}
-        </div>
-        
-    );
+      {/* Pagination controls */}
+      {prevUrl && <button onClick={() => fetchBooks(prevUrl)}>Previous</button>}
+      {nextUrl && <button onClick={() => fetchBooks(nextUrl)}>Next</button>}
+    </div>
+  );
 }
 
 export default Home;

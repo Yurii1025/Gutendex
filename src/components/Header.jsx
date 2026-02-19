@@ -1,6 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
+// NavLink for active navigation styling.
+// useLocation to react to route changes.
+// useRef to detect clicks outside the dropdown.
+// useEffect to manage side effects such as event listeners and body scroll locking.
 
 const categories = [
   "fiction",
@@ -19,10 +23,17 @@ const categories = [
 ];
 
 function Header({ onSearch }) {
+// The component maintains local UI state:
+// input for controlled search input.
+// showCategory to toggle the desktop dropdown.
+// mobileOpen to control the mobile sidebar.
+// This state is UI-specific and not lifted globally.
   const [input, setInput] = useState("");
   const [showCategory, setShowCategory] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  //A ref is used to reference the dropdown container in the DOM. This enables click-outside detection via manual DOM event listeners.
   const dropdownRef = useRef(null);
+  //useLocation allows the component to react to route changes. It is used to automatically close the dropdown when navigation occurs.
   const location = useLocation();
 
   function handleSubmit(e) {
@@ -30,6 +41,7 @@ function Header({ onSearch }) {
     onSearch(input);
   }
 
+  //This effect attaches a global event listener to detect clicks outside the dropdown. Cleanup is properly handled to prevent memory leaks.
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -48,6 +60,7 @@ function Header({ onSearch }) {
     setShowCategory(false);
   }, [location]);
 
+  //Locks background scrolling when mobile sidebar is open. Ensures modal-like behavior and improves mobile UX.
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -68,12 +81,23 @@ function Header({ onSearch }) {
           ☰
         </button>
         <nav className={styles.nav}>
-          <Link to="/" className={styles.link}>
+        {/*NavLink provides active state detection and conditional styling for current routes.*/}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? styles.activeLink : styles.link
+            }
+          >
             Home
-          </Link>
-          <Link to="/favorites" className={styles.link}>
+          </NavLink>
+          <NavLink
+            to="/favorites"
+            className={({ isActive }) =>
+              isActive ? styles.activeLink : styles.link
+            }
+          >
             Favorites
-          </Link>
+          </NavLink>
 
           <div className={styles.dropdown} ref={dropdownRef}>
             <button
@@ -124,12 +148,25 @@ function Header({ onSearch }) {
         </button>
 
         <div className={styles.section}>
-          <Link to="/" onClick={() => setMobileOpen(false)}>
+          <NavLink
+            to="/"
+            end
+            onClick={() => setMobileOpen(false)}
+            className={({ isActive }) =>
+              isActive ? styles.activeSidebarLink : ""
+            }
+          >
             Home
-          </Link>
-          <Link to="/favorites" onClick={() => setMobileOpen(false)}>
+          </NavLink>
+          <NavLink
+            to="/favorites"
+            onClick={() => setMobileOpen(false)}
+            className={({ isActive }) =>
+              isActive ? styles.activeSidebarLink : ""
+            }
+          >
             Favorites
-          </Link>
+          </NavLink>
         </div>
 
         <div className={styles.divider}></div>
