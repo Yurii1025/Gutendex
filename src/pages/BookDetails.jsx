@@ -4,14 +4,22 @@ import { useOutletContext } from "react-router-dom";
 import styles from "./BookDetails.module.css";
 import Loader from "../components/Loader";
 
+// BookDetails renders a single book page
+// Uses dynamic route parameter (:id)
+
 function BookDetails() {
+  // Extract book ID from URL
   const { id } = useParams();
+
+   // Access global favorites state and functions
   const { addToFavorites, removeFromFavorites, favorites } = useOutletContext();
 
+  // Local state for book data and async control
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch book when ID changes
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -28,11 +36,12 @@ function BookDetails() {
       });
   }, [id]);
 
-  // if (loading) return <p>Loading...</p>;
+
   if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>;
   if (!book) return null;
 
+  // Determine if book is already in favorites
   const isFavorite = favorites.some((item) => item.id === book.id);
 
   return (
@@ -56,16 +65,7 @@ function BookDetails() {
 
         <p className={styles.meta}>Language: {book.languages?.join(", ")}</p>
 
-        {/* {isFavorite ? (
-        <p>Already in Favorites</p>
-      ) : (
-        <button
-          className={styles.button}
-          onClick={() => addToFavorites(book)}
-        >
-          Add to Favorites
-        </button>
-      )} */}
+
         {isFavorite ? (
           <button
             className={styles.button}

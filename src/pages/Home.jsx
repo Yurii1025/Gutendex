@@ -6,6 +6,7 @@ import styles from "./Home.module.css";
 
 // Home page handles book search and pagination
 // Fetches data from Gutendex API based on searchTerm
+
 function Home() {
   // Retrieve search term from global context
   const { searchTerm } = useOutletContext();

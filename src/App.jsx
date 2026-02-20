@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import Header from "./components/Header";
 import './App.css'
 
+// Root layout component
+// Manages global state and provides context to child routes
+
 function App() {
 
   // Search term state (lifted to allow shared access)
