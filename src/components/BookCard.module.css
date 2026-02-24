@@ -21,6 +21,11 @@
 .title {
     font-size: 16px;
     margin-bottom: 5px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 5;   /* 5 strings max */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 .author {
     font-size: 14px;
