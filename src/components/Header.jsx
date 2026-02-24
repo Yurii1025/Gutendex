@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
 // NavLink for active navigation styling.
@@ -31,6 +31,7 @@ function Header({ onSearch }) {
   const [input, setInput] = useState("");
   const [showCategory, setShowCategory] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
   //A ref is used to reference the dropdown container in the DOM. This enables click-outside detection via manual DOM event listeners.
   const dropdownRef = useRef(null);
   //useLocation allows the component to react to route changes. It is used to automatically close the dropdown when navigation occurs.
@@ -39,6 +40,7 @@ function Header({ onSearch }) {
   function handleSubmit(e) {
     e.preventDefault();
     onSearch(input);
+    navigate("/");
   }
 
   //This effect attaches a global event listener to detect clicks outside the dropdown. Cleanup is properly handled to prevent memory leaks.
